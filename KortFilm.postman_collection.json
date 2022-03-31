@@ -1,0 +1,1702 @@
+{
+	"info": {
+		"_postman_id": "13e52621-55b4-4b6d-8900-c1fbae1eea67",
+		"name": "KortFilm",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "TestCases",
+			"item": [
+				{
+					"name": "UserAuth",
+					"item": [
+						{
+							"name": "RegisterUser",
+							"item": [
+								{
+									"name": "RegisterUser",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"//Storing ID number in enviroment\r",
+													"var data = pm.response.json();\r",
+													"pm.environment.set(\"id\", data.id);\r",
+													"\r",
+													"pm.test(\"Successful POST request\", function () {\r",
+													"    pm.expect(pm.response.code).to.be.oneOf([201,400]);\r",
+													"});\r",
+													"//Standard user check:\r",
+													"pm.test(\"User register verification\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    pm.expect(jsonData.user_type).to.eql(\"standard_user\");\r",
+													"    pm.expect(jsonData.email).to.eql(\"{{email}}\");\r",
+													"    \r",
+													"});\r",
+													"\r",
+													"\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{{request_body}}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{KortFlimURL}}/api/auth/user/",
+											"host": [
+												"{{KortFlimURL}}"
+											],
+											"path": [
+												"api",
+												"auth",
+												"user",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "RegisterWithExistingUser",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"//Response body check:\r",
+													"pm.test(\"Your test name\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    pm.expect(jsonData.email[0]).to.eql(\"user with this email address already exists.\");\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{{request_body}}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{KortFlimURL}}/api/auth/user/",
+											"host": [
+												"{{KortFlimURL}}"
+											],
+											"path": [
+												"api",
+												"auth",
+												"user",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "RegisterWithoutPass&Email",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 400\", function () {\r",
+													"    pm.response.to.have.status(400);\r",
+													"});\r",
+													"//Response body check:\r",
+													"pm.test(\"Your test name\", function () {\r",
+													"    var jsonData = pm.response.json();\r",
+													"    pm.expect(jsonData.email[0]).to.eql(\"This field may not be blank.\");\r",
+													"    pm.expect(jsonData.password[0]).to.eql(\"This field may not be blank.\");\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"//\"username\":  \"1\", \r",
+													"//\"first_name\": \"2\", \r",
+													"//\"last_name\": \"2\" "
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{ \r\n\r\n\"email\":  \"\",\r\n\"password\": \"\"\r\n\r\n\r\n}\r\n\r\n\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{KortFlimURL}}/api/auth/user/",
+											"host": [
+												"{{KortFlimURL}}"
+											],
+											"path": [
+												"api",
+												"auth",
+												"user",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"// storing user details in a variable",
+											" var user = {",
+											"             username:  'abcxyz',",
+											"             password:  '123456',",
+											"             email:     'kibon84853@whwow.com', ",
+											"             first_name:'abc', ",
+											"             last_name: 'xyz' ",
+											"             };",
+											"",
+											"",
+											" var user_strg = JSON.stringify(user); // req body has been defined in the previous step.",
+											"",
+											" pm.environment.set('request_body', user_strg); // sets an environment variable with the stringified body"
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "Verify Email",
+							"item": [
+								{
+									"name": "loginWithoutVerification",
+									"item": [
+										{
+											"name": "loginWithoutVerification",
+											"event": [
+												{
+													"listen": "test",
+													"script": {
+														"exec": [
+															"pm.test(\"Status code is 403\", function () {\r",
+															"    pm.response.to.have.status(403);\r",
+															"});\r",
+															"//Response body check:\r",
+															"pm.test(\"Response message validation\", function () {\r",
+															"    var jsonData = pm.response.json();\r",
+															"    pm.expect(jsonData.message).to.eql(\"Your email is not verified.\");\r",
+															"});"
+														],
+														"type": "text/javascript"
+													}
+												}
+											],
+											"request": {
+												"method": "POST",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{ \r\n \r\n\"email\": \"{{email}}\",\r\n\"password\": \"{{password}}\"\r\n \r\n}\r\n",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{KortFlimURL}}/api/auth/token/",
+													"host": [
+														"{{KortFlimURL}}"
+													],
+													"path": [
+														"api",
+														"auth",
+														"token",
+														""
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "EmailVerification",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://99.81.206.67:8000/api/auth/user/verify-email/?code=ee01d35405d94c2798b0327ade71c307",
+											"protocol": "http",
+											"host": [
+												"99",
+												"81",
+												"206",
+												"67"
+											],
+											"port": "8000",
+											"path": [
+												"api",
+												"auth",
+												"user",
+												"verify-email",
+												""
+											],
+											"query": [
+												{
+													"key": "code",
+													"value": "ee01d35405d94c2798b0327ade71c307"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "LoginUser",
+					"item": [
+						{
+							"name": "LoginUser",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//Storing token number in enviroment\r",
+											"var data = pm.response.json();\r",
+											"pm.environment.set(\"Token\", data.access);\r",
+											"\r",
+											"//Status code check\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//Login check:\r",
+											"pm.test(\"Response contains 'access'\", function () {\r",
+											"    pm.response.to.have.body(\"access\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"//  pm.environment.get('request_body');\r",
+											"\r",
+											"// var data = JSON.parse( pm.environment.get('request_body'));\r",
+											"// console.log(data);\r",
+											"// pm.environment.set('password', data.password);\r",
+											"// pm.environment.set('email', data.email);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n \r\n\"email\": \"{{email}}\",\r\n\"password\": \"{{password}}\"\r\n \r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/token/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"token",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UserNotFound",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"//Response body check:\r",
+											"pm.test(\"Response message validation\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.detail).to.eql(\"No active account found with the given credentials\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n \r\n\"email\": \"riledep765@kuruapp.com\",\r\n\"password\": \"test_01\"\r\n \r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/token/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"token",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "noEmailField",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"//Response body check:\r",
+											"pm.test(\"Response message validation\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.email[0]).to.eql(\"This field is required.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n \r\n\r\n\"password\": \"{{password}}\"\r\n \r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/token/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"token",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "noPassField",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"//Response body check:\r",
+											"pm.test(\"Response message validation\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.password[0]).to.eql(\"This field is required.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n \r\n\"email\": \"{{email}}\"\r\n\r\n \r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/token/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"token",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Email&PassFieldBlank",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"//Response body check:\r",
+											"pm.test(\"Response message validation\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.email[0]).to.eql(\"This field may not be blank.\");\r",
+											"    pm.expect(jsonData.password[0]).to.eql(\"This field may not be blank.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n \r\n\"email\": \"\",\r\n\"password\": \"\"\r\n \r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/token/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"token",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									" pm.environment.get('request_body');",
+									"",
+									"var data = JSON.parse( pm.environment.get('request_body'));",
+									"console.log(data);",
+									"pm.environment.set('password', data.password);",
+									"pm.environment.set('email', data.email);"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "UpdateUserInfo",
+					"item": [
+						{
+							"name": "getUserDetails",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"//Response body check:\r",
+											"pm.test(\"User ID validation\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.user_type).to.eql(\"standard_user\");\r",
+											"    pm.expect(jsonData.id).to.eql(\"${id}\");\r",
+											"});\r",
+											"\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "bearer{{Token}}",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/{{id}}",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getUserDetails-wrongToken",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"//Response body check:\r",
+											"pm.test(\"Wrong Token check\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.code).to.eql(\"token_not_valid\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ4NjU4Mjk0LCJqdGkiOiI5M2U5YTRiYjU3MjE0NTcxOWFhOGNmZjQ2M2Y1MWQ0MCIsInVzZXJfaWQiOjgxfQ.Dm6B9lUOXVz_rAYHM43_jCfmBZn1vbPIWxgpoDgP5Zcc",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/{{id}}",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"{{id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateInfoWithNoData",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"//Standard user info check:\r",
+											"pm.test(\"Body response check\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"id\"));\r",
+											"    pm.expect(jsonData.email).to.eql(pm.environment.get(\"email\"));\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"first_name\": \"\",\r\n    \"last_name\": \"\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/{{id}}/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"{{id}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateNameWith_150_char",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"//Standard user info check:\r",
+											"pm.test(\"Your test name\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.first_name[0]).to.eql(\"Ensure this field has no more than 150 characters.\");\r",
+											"    pm.expect(jsonData.last_name[0]).to.eql(\"Ensure this field has no more than 150 characters.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"first_name\": \"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpppppppppasdfghjjjkllmnbvczqwhge85236578324guilew gjkg12324546\",\r\n    \"last_name\": \"qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqpppppppppasdfghjjjkllmnbvczqwhge85236578324guilew gjkg12324546\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/{{id}}/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"{{id}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateWithWrongID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([201,404]);\r",
+											"});\r",
+											"//Standard user check:\r",
+											"pm.test(\"Wrong Id check\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.detail).to.eql(\"Not found.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "Hello",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "World",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "jocoja3286@karavic.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "abc",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/789/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"789",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UserInfoUpdate-expiredToken",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"//Standard user info check:\r",
+											"pm.test(\"Update info with different user token\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.detail).to.eql(\"You do not have permission to perform this action.\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ4NzQyMzQ3LCJqdGkiOiI2ODI4MzdiZjIwMGU0OTE4OTBkOWFiMDU2NzIyMWNhYiIsInVzZXJfaWQiOjk2fQ.7JlP4drLeCOaazAZ4px03VN2qgv1Qdp_pnMp9gGzH6c",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "Hello",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "World",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "jocoja3286@karavic.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "abc",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/{{id}}/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"{{id}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UserInfoUpdate",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Successful Status code\", function () {\r",
+											"    pm.expect(pm.response.code).to.be.oneOf([201,200]);\r",
+											"});\r",
+											"//Standard user info check:\r",
+											"pm.test(\"User info update validation\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.user_type).to.eql(\"standard_user\");\r",
+											"    pm.expect(jsonData.id).to.eql(pm.environment.get(\"id\"));\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "abc",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "xyz",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "jocoja3286@karavic.com",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "username",
+											"value": "abc",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/{{id}}/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"{{id}}",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ChangePassWith_2k_char",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    // pm.expect(pm.response.code).to.be.oneOf([200,404]);\r",
+											"});\r",
+											"//Standard user info check:\r",
+											"pm.test(\"Changing password with 2k plus characters\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Password updated successfully\");\r",
+											"   \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{  \r\n \r\n\r\n\"old_password\": \"{{password}}\",\r\n\"new_password\": \"{{2kpass}}\"\r\n\r\n\r\n \r\n} \r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/update-password/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"update-password",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "ChangePassword",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    // pm.expect(pm.response.code).to.be.oneOf([200,404]);\r",
+											"});\r",
+											"//Standard user info check:\r",
+											"pm.test(\"Your test name\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Password updated successfully\");\r",
+											"    //pm.expect(jsonData.id).to.eql(\"81\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{  \r\n \r\n\"old_password\": \"{{2kpass}}\",\r\n\"new_password\": \"{{password}}\"\r\n\r\n \r\n} \r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/update-password/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"update-password",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "changeWithWrongPass",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"    // pm.expect(pm.response.code).to.be.oneOf([200,404]);\r",
+											"});\r",
+											"//Standard user info check:\r",
+											"pm.test(\"Your test name\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.old_password[0]).to.eql(\"Wrong password.\");\r",
+											"    \r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{  \r\n \r\n\"old_password\": \"0123456\",\r\n\"new_password\": \"123456\"\r\n\r\n} \r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/update-password/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"update-password",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ForgotPassword",
+					"item": [
+						{
+							"name": "sendRequestToEmail",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"     pm.response.to.have.status(200);\r",
+											"    //pm.expect(pm.response.code).to.be.oneOf([201,400]);\r",
+											"});\r",
+											"//Standard user check:\r",
+											"pm.test(\"Email successful response validation\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Reset Password link sent successfully!\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n\r\n\"email\":  \"jocoja3286@karavic.com\" \r\n\r\n} \r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/sent-password-reset-request/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"sent-password-reset-request",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "sendRequestToWrongEmail",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"     pm.response.to.have.status(400);\r",
+											"    //pm.expect(pm.response.code).to.be.oneOf([201,400]);\r",
+											"});\r",
+											"//Standard user check:\r",
+											"pm.test(\"Sent Wrong Email\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"User Not Found!\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n\r\n\"email\":  \"jocoja3286@karavic12.com\"\r\n\r\n} \r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/sent-password-reset-request/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"sent-password-reset-request",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "sendRequestWithoutEmail",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"     pm.response.to.have.status(400);\r",
+											"    //pm.expect(pm.response.code).to.be.oneOf([201,400]);\r",
+											"});\r",
+											"//Standard user check:\r",
+											"pm.test(\"Verifying body response.\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"your request not successful!\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n\r\n\"email\":  \"\"\r\n\r\n} \r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/sent-password-reset-request/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"sent-password-reset-request",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "sendRequestToAPI",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"     pm.response.to.have.status(200);\r",
+											"    //pm.expect(pm.response.code).to.be.oneOf([201,400]);\r",
+											"});\r",
+											"//Standard user check:\r",
+											"pm.test(\"Your test name\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Reset Password Successful!\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n\r\n\"code\": \"93581a2c2d8d4c1383b7c202fb6af7c6\",\r\n\"password\":  \"123456\" \r\n\r\n} \r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/reset-password/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"reset-password",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "RequestToAPI-wrongCode",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"     pm.response.to.have.status(403);\r",
+											"    //pm.expect(pm.response.code).to.be.oneOf([201,400]);\r",
+											"});\r",
+											"//Standard user check:\r",
+											"pm.test(\"Requesting API with wrong OTP code.\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Code already used or invalid code!\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n\r\n\"code\": \"93581a2c2d8d4c1383b7c202fb6af7c60\",\r\n\"password\":  \"123456\" \r\n\r\n} \r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/reset-password/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"reset-password",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "RequestToAPI-WithoutCode",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"     pm.response.to.have.status(400);\r",
+											"    //pm.expect(pm.response.code).to.be.oneOf([201,400]);\r",
+											"});\r",
+											"//Standard user check:\r",
+											"pm.test(\"Sending password change request without OTP code.\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Code and password is required!\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n\r\n\"code\": \"\",\r\n\"password\":  \"123456\" \r\n\r\n} \r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/reset-password/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"reset-password",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "AcceptInvitation",
+					"item": [
+						{
+							"name": "InvitationAccept",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"     pm.response.to.have.status(200);\r",
+											"    //pm.expect(pm.response.code).to.be.oneOf([201,400]);\r",
+											"});\r",
+											"//Standard user check:\r",
+											"pm.test(\"Invitation status check\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Invitation accepted and password set Successful!\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n\"code\": \"38f0d5dd87bb49f0bab44dea04abd54b\",\r\n\"password\" :  \"1234\"\r\n} \r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/accept_invitation/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"accept_invitation",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UsedCodeCheck",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"     pm.response.to.have.status(403);\r",
+											"    //pm.expect(pm.response.code).to.be.oneOf([201,400]);\r",
+											"});\r",
+											"//Standard user check:\r",
+											"pm.test(\"Invitation status check\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Code already used or invalid code!\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n\"code\": \"932d623f111a4f089bd22bdf24b0da06\",\r\n\"password\" :  \"123456\"\r\n} \r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/accept_invitation/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"accept_invitation",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "acceptWithoutPassOrCode",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"     pm.response.to.have.status(400);\r",
+											"    //pm.expect(pm.response.code).to.be.oneOf([201,400]);\r",
+											"});\r",
+											"//Standard user check:\r",
+											"pm.test(\"Invitation status check\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Code and password is required!\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \r\n\"code\": \"38f0d5dd87bb49f0bab44dea04abd54b\",\r\n\"password\" :  \"\"\r\n} \r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{KortFlimURL}}/api/auth/user/accept_invitation/",
+									"host": [
+										"{{KortFlimURL}}"
+									],
+									"path": [
+										"api",
+										"auth",
+										"user",
+										"accept_invitation",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
